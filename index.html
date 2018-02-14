@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <title>MMD Player</title>
+</head>
+
+<body>
+    <div id="main-div">
+        <div id="loading">
+            <div class="spinner" style="display:none" id="loading-image"></div>
+            <p id="loding-text">please enable JavaScript to use this page</p>
+        </div>
+    </div>
+
+
+    <script>
+        document.querySelector("#loding-text").textContent = "loding files..."
+        document.getElementById("loading-image").style.display = "block";
+    </script>
+    <script src="model/mmdparser.js"></script>
+    <script src="model/ammo.js"></script>
+    <script src="dist/index.min.js"></script>
+</body>
+</html>
