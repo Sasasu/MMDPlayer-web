@@ -3563,7 +3563,7 @@ mmdplayer.cameraFile = cameraFile;
 mmdplayer.musicFile = musicFile;
 mmdplayer.vmdFile = vmdFile;
 mmdplayer.stageFile = stageFile;
-window.addEventListener('resize', mmdplayer.resize, false);
+window.addEventListener('resize', function () { mmdplayer.resize(window.innerWidth, window.innerHeight); }, false);
 function onProgress(item, loaded, total) {
     console.log(item);
     document.getElementById("loding-text").innerText = ((loaded / total) * 100).toFixed(0) + " %";

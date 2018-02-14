@@ -11,7 +11,7 @@ mmdplayer.cameraFile = cameraFile;
 mmdplayer.musicFile = musicFile;
 mmdplayer.vmdFile = vmdFile;
 mmdplayer.stageFile = stageFile;
-window.addEventListener('resize', <any>mmdplayer.resize, false);
+window.addEventListener('resize', function () { mmdplayer.resize(window.innerWidth, window.innerHeight) }, false);
 function onProgress(item: any, loaded: number, total: number) {
     console.log(item);
     document.getElementById("loding-text").innerText = ((loaded / total) * 100).toFixed(0) + " %";
