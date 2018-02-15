@@ -3571,6 +3571,7 @@ function onProgress(item, loaded, total) {
 function onLoad() {
     document.getElementById("loding-text").innerText = "click to play";
     document.getElementById("loading-image").style.display = "none";
+    mmdplayer.mmdHelper.unifyAnimationDuration({ afterglow: 2.0 });
     document.getElementById("loding-text").onclick = function () {
         document.getElementById("loding-text").innerText = "Initializing physical";
         mmdplayer.init();
@@ -3598,6 +3599,7 @@ __webpack_require__(6);
 __webpack_require__(7);
 class MMDPlayer {
     constructor() {
+        this.toAdd = new Array();
         this.vmdFile = null;
         this.stageFile = null;
         this.mmdHelper = null;
@@ -3611,7 +3613,6 @@ class MMDPlayer {
         this.scene = null;
         this.spotLight = null;
         this.directionalLight = null;
-        this.clock = new THREE.Clock();
         this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
         this.camera.position.y = 15;
         this.camera.position.z = 50;
@@ -3662,7 +3663,7 @@ class MMDPlayer {
             this.mmdHelper.add(mesh);
             this.mmdHelper.setAnimation(mesh);
             this.mmdHelper.setPhysics(mesh);
-            this.scene.add(mesh);
+            this.toAdd.push(mesh);
         }.bind(this));
         loader.loadVmds([this.cameraFile], function (vmd) {
             this.mmdHelper.setCamera(this.camera);
@@ -3672,9 +3673,8 @@ class MMDPlayer {
         loader.loadAudio(this.musicFile, function (audio, listener) {
             listener.position.z = 1;
             this.mmdHelper.setAudio(audio, listener, { delayTime: 0.0 });
-            this.mmdHelper.unifyAnimationDuration({ afterglow: 2.0 });
-            this.scene.add(audio);
-            this.scene.add(listener);
+            this.toAdd.push(audio);
+            this.toAdd.push(listener);
         }.bind(this));
         loader.loadModel(this.stageFile, function (mesh) {
             var sceneModel = mesh;
@@ -3686,15 +3686,20 @@ class MMDPlayer {
             mesh.castShadow = true;
             mesh.receiveShadow = true;
             this.mmdHelper.add(mesh);
-            this.scene.add(mesh);
+            this.toAdd.push(mesh);
         }.bind(this));
         return manager;
     }
     init() {
+        this.toAdd.forEach(function (item) {
+            this.scene.add(item);
+        }.bind(this));
+        this.mmdHelper.unifyAnimationDuration({ afterglow: 1.0 });
         this.addToBrowser();
         this._render.render(this.scene, this.camera);
     }
     play() {
+        this.clock = new THREE.Clock();
         this._render.domElement.style.display = "block";
         MMDPlayer.animate(this);
     }

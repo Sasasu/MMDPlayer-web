@@ -10,7 +10,7 @@ import { Object3D, MMDHelper, LoadingManager } from "three";
 
 export default class MMDPlayer {
     public constructor() {
-        this.clock = new THREE.Clock();
+
 
         this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
         this.camera.position.y = 15;
@@ -68,7 +68,7 @@ export default class MMDPlayer {
             this.mmdHelper.add(mesh);
             this.mmdHelper.setAnimation(mesh);
             this.mmdHelper.setPhysics(mesh);
-            this.scene.add(mesh);
+            this.toAdd.push(mesh);
         }.bind(this));
         loader.loadVmds([this.cameraFile], function (vmd) {
             this.mmdHelper.setCamera(this.camera);
@@ -78,9 +78,8 @@ export default class MMDPlayer {
         loader.loadAudio(this.musicFile, function (audio, listener) {
             listener.position.z = 1;
             this.mmdHelper.setAudio(audio, listener, { delayTime: 0.0 });
-            this.mmdHelper.unifyAnimationDuration({ afterglow: 2.0 });
-            this.scene.add(audio);
-            this.scene.add(listener);
+            this.toAdd.push(audio);
+            this.toAdd.push(listener);
         }.bind(this));
         loader.loadModel(this.stageFile, function (mesh) {
             var sceneModel = mesh;
@@ -92,15 +91,21 @@ export default class MMDPlayer {
             mesh.castShadow = true;
             mesh.receiveShadow = true;
             this.mmdHelper.add(mesh);
-            this.scene.add(mesh);
+            this.toAdd.push(mesh);
         }.bind(this));
         return manager;
     }
+    private toAdd: Array<THREE.Mesh> = new Array();
     public init(): void {
+        this.toAdd.forEach(function (item) {
+            this.scene.add(item);
+        }.bind(this));
+        this.mmdHelper.unifyAnimationDuration({ afterglow: 1.0 });
         this.addToBrowser();
         this._render.render(this.scene, this.camera);
     }
     public play() {
+        this.clock = new THREE.Clock();
         this._render.domElement.style.display = "block";
         MMDPlayer.animate(this);
     }

@@ -6,7 +6,7 @@
         "watch": "webpack -w",
         "build": "webpack",
         "dev": "npm run watch & webpack-dev-server --inline --hot --content-base .",
-        "prepublish": "webpack --optimize-minimize"
+        "prepublish": "tsc ; webpack ; uglifyjs dist/index.js -o dist/index.min.js -c -m"
     },
     "author": "",
     "license": "ISC",
