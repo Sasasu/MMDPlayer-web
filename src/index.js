@@ -20,7 +20,6 @@ function onProgress(item, loaded, total) {
 function onLoad() {
     document.getElementById("loding-text").innerText = "click to play";
     document.getElementById("loading-image").style.display = "none";
-    mmdplayer.mmdHelper.unifyAnimationDuration({ afterglow: 2.0 });
     document.getElementById("loding-text").onclick = function () {
         document.getElementById("loding-text").innerText = "Initializing physical";
         mmdplayer.init();

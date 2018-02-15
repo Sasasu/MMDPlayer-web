@@ -10,8 +10,6 @@ import { Object3D, MMDHelper, LoadingManager } from "three";
 
 export default class MMDPlayer {
     public constructor() {
-
-
         this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
         this.camera.position.y = 15;
         this.camera.position.z = 50;
@@ -19,7 +17,7 @@ export default class MMDPlayer {
         this._render = new THREE.WebGLRenderer({ antialias: true });
         this._render.setPixelRatio(window.devicePixelRatio);
         this._render.setSize(window.innerWidth, window.innerHeight);
-        this._render.setClearColor(new THREE.Color(0x000000));
+        this._render.setClearColor(new THREE.Color(0xffffff));
         this._render.shadowMap.enabled = true;
 
         this.scene = new THREE.Scene();
@@ -78,7 +76,7 @@ export default class MMDPlayer {
         loader.loadAudio(this.musicFile, function (audio, listener) {
             listener.position.z = 1;
             this.mmdHelper.setAudio(audio, listener, { delayTime: 0.0 });
-            this.toAdd.push(audio);
+            // this.toAdd.push(audio);
             this.toAdd.push(listener);
         }.bind(this));
         loader.loadModel(this.stageFile, function (mesh) {
@@ -100,7 +98,7 @@ export default class MMDPlayer {
         this.toAdd.forEach(function (item) {
             this.scene.add(item);
         }.bind(this));
-        this.mmdHelper.unifyAnimationDuration({ afterglow: 1.0 });
+        this.mmdHelper.unifyAnimationDuration({ afterglow: 0.0 });
         this.addToBrowser();
         this._render.render(this.scene, this.camera);
     }
@@ -114,7 +112,6 @@ export default class MMDPlayer {
         this.camera.aspect = width / height;
         this.camera.updateMatrix();
     }
-
     private static animate(object: MMDPlayer) {
         object.render();
         var stats = new Stats();
@@ -127,12 +124,10 @@ export default class MMDPlayer {
             requestAnimationFrame(lambda);
         })
     }
-
     private addToBrowser(): void {
         this._render.domElement.style.display = "none";
         document.querySelector("#main-div").appendChild(this._render.domElement);
     }
-
     private render(): void {
         var delta = this.clock.getDelta();
         this.mmdHelper.animate(delta);

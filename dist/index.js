@@ -3571,7 +3571,6 @@ function onProgress(item, loaded, total) {
 function onLoad() {
     document.getElementById("loding-text").innerText = "click to play";
     document.getElementById("loading-image").style.display = "none";
-    mmdplayer.mmdHelper.unifyAnimationDuration({ afterglow: 2.0 });
     document.getElementById("loding-text").onclick = function () {
         document.getElementById("loding-text").innerText = "Initializing physical";
         mmdplayer.init();
@@ -3619,7 +3618,7 @@ class MMDPlayer {
         this._render = new THREE.WebGLRenderer({ antialias: true });
         this._render.setPixelRatio(window.devicePixelRatio);
         this._render.setSize(window.innerWidth, window.innerHeight);
-        this._render.setClearColor(new THREE.Color(0x000000));
+        this._render.setClearColor(new THREE.Color(0xffffff));
         this._render.shadowMap.enabled = true;
         this.scene = new THREE.Scene();
         this.spotLight = new THREE.SpotLight(0x223344);
@@ -3673,7 +3672,7 @@ class MMDPlayer {
         loader.loadAudio(this.musicFile, function (audio, listener) {
             listener.position.z = 1;
             this.mmdHelper.setAudio(audio, listener, { delayTime: 0.0 });
-            this.toAdd.push(audio);
+            // this.toAdd.push(audio);
             this.toAdd.push(listener);
         }.bind(this));
         loader.loadModel(this.stageFile, function (mesh) {
@@ -3694,7 +3693,7 @@ class MMDPlayer {
         this.toAdd.forEach(function (item) {
             this.scene.add(item);
         }.bind(this));
-        this.mmdHelper.unifyAnimationDuration({ afterglow: 1.0 });
+        this.mmdHelper.unifyAnimationDuration({ afterglow: 0.0 });
         this.addToBrowser();
         this._render.render(this.scene, this.camera);
     }
